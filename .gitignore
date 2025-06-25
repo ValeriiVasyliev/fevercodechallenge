@@ -50,7 +50,7 @@ wp-content/plugins/*
 
 # custom plugin 'vanyoo-ad-packages'
 !wp-content/plugins/fever-code-challenge/
-wp-content/plugins/fever-code-challenges/node_modules/
+wp-content/plugins/fever-code-challenge/node_modules/
 wp-content/plugins/fever-code-challenge/vendor/
 wp-content/plugins/fever-code-challenge/deps/
 wp-content/plugins/fever-code-challenge/package-lock.json
