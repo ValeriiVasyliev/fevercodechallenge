@@ -1,0 +1,47 @@
+{
+    "name": "valercodes/fever-code-challenge",
+    "description": "Fever Code Challenge WordPress Project",
+    "type": "project",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://wpackagist.org",
+            "only": ["wpackagist-plugin/*", "wpackagist-theme/*"]
+        }
+    ],
+    "require": {
+        "php": ">=8.3",
+        "ext-zip": "*",
+        "composer/installers": "^1.9",
+        "wp-cli/wp-cli": "^2.9",
+        "wpackagist-theme/understrap": "^1.2.4"
+    },
+    "extra": {
+        "installer-paths": {
+            "wp-content/plugins/{$name}/": ["type:wordpress-plugin"],
+            "wp-content/themes/{$name}/": ["type:wordpress-theme"]
+        }
+    },
+    "scripts": {
+        "post-create-project-cmd": [
+            "composer install",
+            "wp core download --version=6.8.1"
+        ],
+        "build": [
+            "composer install",
+            "wp core download --version=6.8.1"
+        ]
+    },
+    "config": {
+        "platform-check": false,
+        "vendor-dir": "vendor",
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "preferred-install": "dist",
+        "allow-plugins": {
+            "composer/installers": true,
+            "szepeviktor/composer-envato": false
+        }
+    },
+    "minimum-stability": "dev"
+}

@@ -1,0 +1,22 @@
+{
+  "name": "fever-code-challenge",
+  "version": "1.0.0",
+  "description": "A project to minify CSS and JS using Webpack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js --mode production"
+  },
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "css-loader": "^6.8.1",
+    "style-loader": "^3.3.2",
+    "mini-css-extract-plugin": "^2.7.8",
+    "terser-webpack-plugin": "^5.3.8",
+    "css-minimizer-webpack-plugin": "^3.0.2"
+  },
+  "dependencies": {}
+}

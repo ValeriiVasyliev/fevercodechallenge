@@ -1,0 +1,23 @@
+{
+  "name": "valercodes/fever-code-challenge-plugin",
+  "description": "Fever Code Challenge WordPress Plugin",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "version": "0.1.0",
+  "vendor-dir": "vendor",
+  "require": {
+    "php": ">=8.3"
+  },
+  "autoload": {
+      "psr-4": {
+        "FeverCodeChallenge\\": "src/"
+      }
+   },
+  "scripts": {
+    "cs": "phpcs --standard=phpcs.xml --report=summary,source",
+    "cs-fix": "phpcbf --standard=phpcs.xml",
+    "pot": "wp i18n make-pot . languages/fever-code-challenge.pot --exclude=node_modules,vendor,build --allow-root"
+  }
+}
