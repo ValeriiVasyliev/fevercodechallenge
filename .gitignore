@@ -33,6 +33,7 @@ pclzip-*
 !deploy.yml
 !.github/
 !deployment-process.png
+!Wordpress\ Challenge.pdf
 
 # ddev files
 !.ddev/
