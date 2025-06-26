@@ -35,6 +35,11 @@ final class Front {
 	 */
 	public function init(): void {
 		$this->register_hooks();
+
+		( new Front\Pokemon( $this->plugin ) )->init();
+		( new Front\PokemonList( $this->plugin ) )->init();
+		( new Front\PokemonGenerate( $this->plugin ) )->init();
+		( new Front\PokemonRandom( $this->plugin ) )->init();
 	}
 
 	/**

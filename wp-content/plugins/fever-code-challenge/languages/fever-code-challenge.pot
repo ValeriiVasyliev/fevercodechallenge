@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-06-25T09:38:16+00:00\n"
+"POT-Creation-Date: 2025-06-26T09:30:20+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fever-code-challenge\n"
@@ -30,42 +30,112 @@ msgstr ""
 msgid "https://www.codeable.io/developers/valerii-vasyliev/?ref=OaT0y"
 msgstr ""
 
-#: src/Plugin.php:141
+#: src/Admin.php:62
+msgid "Featured Image"
+msgstr ""
+
+#: src/Admin.php:79
+msgid "No Image"
+msgstr ""
+
+#: src/Admin.php:130
+msgid "Click the button below to load a Pokémon from the API."
+msgstr ""
+
+#: src/Admin.php:133
+msgid "Load Pokémon from API"
+msgstr ""
+
+#: src/Admin.php:187
+msgid "You do not have permission to create a Pokemon."
+msgstr ""
+
+#: src/Admin.php:197
+msgid "Invalid nonce."
+msgstr ""
+
+#: src/Admin.php:207
+msgid "Failed to retrieve Pokemon list."
+msgstr ""
+
+#: src/Admin.php:221
+msgid "Failed to retrieve Pokemon details."
+msgstr ""
+
+#. translators: %s is either "create" or "update".
+#: src/Admin.php:260
+#, php-format
+msgid "Failed to %s Pokemon post."
+msgstr ""
+
+#: src/Admin.php:274
+msgid "Failed to download Pokemon image."
+msgstr ""
+
+#: src/Admin.php:299
+msgid "Pokemon created successfully."
+msgstr ""
+
+#: src/Plugin.php:139
 msgid "Pokemons"
 msgstr ""
 
-#: src/Plugin.php:142
+#: src/Plugin.php:140
 msgid "Pokemon"
 msgstr ""
 
-#: src/Plugin.php:143
+#: src/Plugin.php:141
 msgid "Add New"
 msgstr ""
 
-#: src/Plugin.php:144
+#: src/Plugin.php:142
 msgid "Add New Pokemon"
 msgstr ""
 
-#: src/Plugin.php:145
+#: src/Plugin.php:143
 msgid "Edit Pokemon"
 msgstr ""
 
-#: src/Plugin.php:146
+#: src/Plugin.php:144
 msgid "New Pokemon"
 msgstr ""
 
-#: src/Plugin.php:147
+#: src/Plugin.php:145
 msgid "View Pokemon"
 msgstr ""
 
-#: src/Plugin.php:148
+#: src/Plugin.php:146
 msgid "Search Pokemons"
 msgstr ""
 
-#: src/Plugin.php:149
+#: src/Plugin.php:147
 msgid "No Pokemons found"
 msgstr ""
 
-#: src/Plugin.php:150
+#: src/Plugin.php:148
 msgid "No Pokemons found in Trash"
+msgstr ""
+
+#: assets/js/admin.js:24
+msgid "Missing base URL or nonce."
+msgstr ""
+
+#: assets/js/admin.js:44
+msgid "Pokemon created successfully!"
+msgstr ""
+
+#: assets/js/admin.js:49
+msgid "Unknown error"
+msgstr ""
+
+#: assets/js/admin.js:50
+msgid "Failed to create Pokemon:"
+msgstr ""
+
+#: assets/js/admin.js:54
+msgid "AJAX error:"
+msgstr ""
+
+#: assets/js/admin.js:55
+msgid "AJAX request failed."
 msgstr ""

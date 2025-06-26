@@ -10,29 +10,23 @@ namespace FeverCodeChallenge\Interfaces;
 interface IAPI {
 
 	/**
-	 * Get a list of items from the API.
+	 * Get a list of items from the API with optional pagination.
 	 *
-	 * @param bool $force Force refresh from remote API.
+	 * @param int  $limit  Number of items to retrieve.
+	 * @param int  $offset Offset for pagination.
+	 * @param bool $force  Whether to force refresh from the remote API.
 	 * @return array
 	 */
-	public function get_list( bool $force = false ): array;
+	public function get_list( int $limit = 20, int $offset = 0, bool $force = false ): array;
 
 	/**
-	 * Get details about a specific item (e.g. Pokémon).
+	 * Get structured Pokemon data (merged + normalized).
 	 *
-	 * @param string $name_or_id The item name or ID.
-	 * @param bool   $force      Force refresh from remote API.
+	 * @param string $name_or_id Pokémon name or ID.
+	 * @param bool   $force      Whether to force refresh from the API.
 	 * @return array
 	 */
-	public function get_details( string $name_or_id, bool $force = false ): array;
-
-	/**
-	 * Default method to retrieve items (could be mapped to get_list).
-	 *
-	 * @param bool $force Force refresh from remote API.
-	 * @return array
-	 */
-	public function get_items( bool $force = false ): array;
+	public function get_pokemon_data( string $name_or_id, bool $force = false ): array;
 
 	/**
 	 * Recursively sanitize data.

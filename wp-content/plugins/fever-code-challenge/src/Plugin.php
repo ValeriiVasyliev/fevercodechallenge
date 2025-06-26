@@ -41,8 +41,8 @@ final class Plugin {
 	/**
 	 * Plugin constructor.
 	 *
-	 * @param IAPI   $api               Injected API instance.
-	 * @param string $plugin_file_path  Path to main plugin file (__FILE__).
+	 * @param IAPI   $api              Injected API instance.
+	 * @param string $plugin_file_path Path to main plugin file (__FILE__).
 	 */
 	public function __construct( IAPI $api, string $plugin_file_path ) {
 		$this->api        = $api;
@@ -58,12 +58,12 @@ final class Plugin {
 	public function init(): void {
 		$this->register_hooks();
 
-		// Initialize core functionality
-		if ( is_admin() ) {
-			( new Admin( $this ) )->init();
-		} else {
-			( new Front( $this ) )->init();
-		}
+		// Initialize core functionality.
+		( new Admin( $this ) )->init();
+		( new Front( $this ) )->init();
+
+		// Initialize REST API functionality.
+		( new REST( $this ) )->init();
 	}
 
 	/**
@@ -72,8 +72,8 @@ final class Plugin {
 	protected function register_hooks(): void {
 		$this->load_plugin_textdomain();
 
-		// register custom post type for Pokemon
-		add_action( 'init', array( $this, 'register_pokemon_post_type' ) );
+		// Register custom post type for Pokemon.
+		add_action( 'init', [ $this, 'register_pokemon_post_type' ] );
 	}
 
 	/**
@@ -81,7 +81,6 @@ final class Plugin {
 	 */
 	protected function load_plugin_textdomain(): void {
 		$domain = 'fever-code-challenge';
-
 		if ( isset( $GLOBALS['l10n'][ $domain ] ) ) {
 			return;
 		}
@@ -136,7 +135,6 @@ final class Plugin {
 	 * @return void
 	 */
 	public function register_pokemon_post_type(): void {
-
 		$labels = [
 			'name'               => __( 'Pokemons', 'fever-code-challenge' ),
 			'singular_name'      => __( 'Pokemon', 'fever-code-challenge' ),
@@ -150,20 +148,20 @@ final class Plugin {
 			'not_found_in_trash' => __( 'No Pokemons found in Trash', 'fever-code-challenge' ),
 		];
 
-		$args = array(
+		$args = [
 			'labels'             => $labels,
 			'public'             => true,
 			'publicly_queryable' => true,
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'pokemon' ),
+			'rewrite'            => [ 'slug' => 'pokemon' ],
 			'capability_type'    => 'post',
 			'has_archive'        => true,
 			'hierarchical'       => false,
 			'menu_position'      => 5,
-			'supports'           => array( 'title', 'editor', 'thumbnail', 'custom-fields' ),
-		);
+			'supports'           => [ 'title', 'editor', 'thumbnail', 'custom-fields' ],
+		];
 
 		register_post_type( 'pokemon', $args );
 	}
