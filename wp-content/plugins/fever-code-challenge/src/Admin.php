@@ -14,7 +14,7 @@ use WP_Query;
  *
  * Handles all admin-related functionality.
  */
-final class Admin {
+class Admin {
 
 	/**
 	 * Plugin instance.

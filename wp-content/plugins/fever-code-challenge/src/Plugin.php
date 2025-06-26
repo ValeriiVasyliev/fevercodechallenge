@@ -15,7 +15,7 @@ use WP_Error;
  *
  * Responsible for bootstrapping the plugin.
  */
-final class Plugin {
+class Plugin {
 
 	/**
 	 * Base URL to the plugin directory.
@@ -165,4 +165,9 @@ final class Plugin {
 
 		register_post_type( 'pokemon', $args );
 	}
+
+	protected function getPluginDir(): string {
+		return dirname( $this->plugin_file_path );
+	}
+
 }

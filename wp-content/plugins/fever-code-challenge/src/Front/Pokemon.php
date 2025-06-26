@@ -12,7 +12,7 @@ use FeverCodeChallenge\Plugin;
 /**
  * Class Pokemon
  */
-final class Pokemon {
+class Pokemon {
 
 	/**
 	 * The Plugin instance.

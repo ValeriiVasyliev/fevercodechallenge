@@ -26,6 +26,28 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require_once __DIR__ . '/vendor/autoload.php';
 }
 
+/**
+ * Activation hook.
+ *
+ * @return void
+ */
+function fever_code_challenge_activate() {
+	// Flush rewrite rules on activation.
+	flush_rewrite_rules();
+}
+register_activation_hook( __FILE__, 'FeverCodeChallenge\fever_code_challenge_activate' );
+
+/**
+ * Deactivation hook.
+ *
+ * @return void
+ */
+function fever_code_challenge_deactivate() {
+	// Flush rewrite rules on deactivation.
+	flush_rewrite_rules();
+}
+register_deactivation_hook( __FILE__, 'FeverCodeChallenge\fever_code_challenge_deactivate' );
+
 // Plugin debug mode.
 define( 'FEVER_CODE_CHALLENGE_DEBUG', true );
 

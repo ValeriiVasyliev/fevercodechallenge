@@ -12,7 +12,7 @@ namespace FeverCodeChallenge;
  *
  * Handles all public-facing functionality of the plugin.
  */
-final class Front {
+class Front {
 
 	/**
 	 * Plugin instance.
@@ -46,11 +46,30 @@ final class Front {
 	 * Register front-end specific hooks.
 	 */
 	protected function register_hooks(): void {
+
+		// Enqueue front-end assets.
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_assets' ] );
 	}
 
 	/**
-	 * Example: Enqueue front-end assets.
+	 * Enqueue front-end styles and scripts.
 	 */
 	public function enqueue_assets(): void {
+
+		if ( FEVER_CODE_CHALLENGE_DEBUG ) {
+			wp_enqueue_style(
+				'fever-code-challenge-style',
+				$this->plugin->plugin_url() . '/assets/css/style.css',
+				[],
+				filemtime( $this->plugin->plugin_dir() . '/assets/css/style.css' )
+			);
+		} else {
+			wp_enqueue_style(
+				'fever-code-challenge-style',
+				$this->plugin->plugin_url() . '/assets/css/style.css',
+				[],
+				filemtime( $this->plugin->plugin_dir() . '/assets/css/style.css' )
+			);
+		}
 	}
 }

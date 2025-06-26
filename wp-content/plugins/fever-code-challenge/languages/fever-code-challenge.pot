@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-06-26T09:30:20+00:00\n"
+"POT-Creation-Date: 2025-06-26T19:43:29+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fever-code-challenge\n"
@@ -114,6 +114,26 @@ msgstr ""
 
 #: src/Plugin.php:148
 msgid "No Pokemons found in Trash"
+msgstr ""
+
+#: src/REST.php:71
+msgid "Number of Pokémon to return"
+msgstr ""
+
+#: src/REST.php:79
+msgid "Order of the results: title, rand, or date"
+msgstr ""
+
+#: src/REST.php:146
+msgid "No Pokémon found."
+msgstr ""
+
+#: src/REST.php:206
+msgid "Pokémon not found."
+msgstr ""
+
+#: templates/random-pokemon.php:26
+msgid "Generate Another Random Pokemon"
 msgstr ""
 
 #: assets/js/admin.js:24

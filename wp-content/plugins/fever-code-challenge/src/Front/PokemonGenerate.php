@@ -12,8 +12,7 @@ use FeverCodeChallenge\Plugin;
 /**
  * Class PokemonGenerate
  */
-final class PokemonGenerate {
-
+class PokemonGenerate {
 	/**
 	 * The Plugin instance.
 	 *
@@ -41,5 +40,42 @@ final class PokemonGenerate {
 	 * Register class hooks.
 	 */
 	protected function hooks(): void {
+		add_action( 'init', [ $this, 'register_rewrite_rule' ] );
+		add_filter( 'query_vars', [ $this, 'add_query_var' ] );
+		add_action( 'template_redirect', [ $this, 'maybe_generate_pokemon' ] );
+	}
+
+	/**
+	 * Register the /generate rewrite rule.
+	 */
+	public function register_rewrite_rule(): void {
+		add_rewrite_rule( '^generate/?$', 'index.php?generate_pokemon=1', 'top' );
+	}
+
+	/**
+	 * Add 'generate_pokemon' to the list of query vars.
+	 *
+	 * @param array $vars Existing query vars.
+	 * @return array Modified query vars.
+	 */
+	public function add_query_var( array $vars ): array {
+		$vars[] = 'generate_pokemon';
+		return $vars;
+	}
+
+	/**
+	 * Handle the /generate route logic.
+	 */
+	public function maybe_generate_pokemon(): void {
+		if ( get_query_var( 'generate_pokemon' ) ) {
+
+			$template = locate_template( 'fever-code-challenge/generate-pokemon.php' );
+			if ( ! $template ) {
+				$template = $this->plugin->plugin_dir() . '/templates/generate-pokemon.php';
+			}
+			include $template;
+
+			exit();
+		}
 	}
 }

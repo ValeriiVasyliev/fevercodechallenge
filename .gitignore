@@ -58,6 +58,7 @@ wp-content/plugins/fever-code-challenge/package-lock.json
 wp-content/plugins/fever-code-challenge/composer.lock
 wp-content/plugins/fever-code-challenge/composer-deps.lock
 wp-content/plugins/fever-code-challenge/.phpcs.cache
+wp-content/plugins/fever-code-challenge/.phpunit.cache/
 
 # Ignore everything in the "themes" directory, except the themes you
 # specify (see the commented-out example for a hint on how to do this.)

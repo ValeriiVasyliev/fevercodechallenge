@@ -20,7 +20,7 @@
 	<exclude-pattern>*\.css</exclude-pattern>
 	<exclude-pattern>*\.scss</exclude-pattern>
 	<exclude-pattern>*/.codeception/*</exclude-pattern>
-	<exclude-pattern>*/.tests/*</exclude-pattern>
+	<exclude-pattern>*/tests/*</exclude-pattern>
 
 	<!-- How to scan -->
 	<arg value="sp"/> <!-- Show sniff and progress -->
