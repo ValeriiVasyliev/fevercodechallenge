@@ -26,8 +26,8 @@
     }
   },
   "scripts": {
-    "cs": "phpcs --standard=phpcs.xml",
-    "cs-fix": "phpcbf --standard=phpcs.xml",
+    "phpcs": "phpcs --standard=phpcs.xml",
+    "phpcbf": "phpcbf --standard=phpcs.xml",
     "pot": "wp i18n make-pot . languages/fever-code-challenge.pot --exclude=node_modules,vendor,build --allow-root",
     "test": "phpunit"
   }

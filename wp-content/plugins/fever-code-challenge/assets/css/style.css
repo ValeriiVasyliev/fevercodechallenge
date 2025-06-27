@@ -1,44 +1,52 @@
-/* Random pokemon */
-
-.container-pokemon-random {
+/* Shared container styles for random and generate */
+.container-pokemon-random,
+.container-pokemon-generate {
     display: flex;
-    justify-content: center; /* horizontal center */
-    height: 100vh;           /* full viewport height for vertical centering */
-    padding: 20px;           /* add some padding so content isn’t stuck on edges on small screens */
+    justify-content: center;
+    height: 100vh;
+    padding: 20px;
     box-sizing: border-box;
 }
 
-.container-pokemon-random #main {
-    padding: 0 20px 20px 20px; /* no top padding, but side and bottom padding */
+.container-pokemon-random #main,
+.container-pokemon-generate #main {
+    padding: 0 20px 20px 20px;
     text-align: center;
     max-width: 400px;
-    width: 100%;              /* allow shrinking on smaller screens */
+    width: 100%;
     box-sizing: border-box;
 }
 
-.container-pokemon-random #main .pokemon-image {
+.container-pokemon-random #main .pokemon-image,
+.container-pokemon-generate #main .pokemon-image {
     max-width: 300px;
-    width: 100%;              /* make image responsive */
+    width: 100%;
     height: auto;
 }
 
-.container-pokemon-random #main .pokemon-details {
-    padding-bottom: 20px; /* ensure there’s space below the content */
+.container-pokemon-random #main .pokemon-details,
+.container-pokemon-generate #main .pokemon-details {
+    padding-bottom: 20px;
 }
 
-.container-pokemon-random #main h1 {
+.container-pokemon-random #main h1,
+.container-pokemon-generate #main h1 {
     font-size: 2.5em;
     font-weight: bold;
     margin: 0.2em 0;
 }
 
-.container-pokemon-random #main p {
+.container-pokemon-random #main p,
+.container-pokemon-generate #main p {
     font-size: 1.2em;
     font-style: italic;
     margin: 0.5em 0 1em 0;
 }
 
-.container-pokemon-random #main .button-primary {
+/* Shared button styles */
+.container-pokemon-random #main .button-primary,
+.container-pokemon-generate #main .button-primary,
+.pokemon-generate-button {
     background-color: #0073aa;
     color: white;
     padding: 10px 20px;
@@ -49,11 +57,14 @@
     transition: background-color 0.3s ease;
 }
 
-.container-pokemon-random #main .button-primary:hover {
+.container-pokemon-random #main .button-primary:hover,
+.container-pokemon-generate #main .button-primary:hover,
+.pokemon-generate-button:hover {
     background-color: #005177;
 }
 
-.container-pokemon-random #main a.pokemon-link {
+.container-pokemon-random #main a.pokemon-link,
+.container-pokemon-generate #main a.pokemon-link {
     display: inline-block;
     margin-top: 10px;
     text-decoration: none;
@@ -63,33 +74,41 @@
 
 /* Responsive adjustments */
 @media (max-width: 480px) {
-    .container-pokemon-random {
-        height: auto;          /* let height adjust naturally on small screens */
-        padding: 40px 20px;    /* more vertical padding */
+    .container-pokemon-random,
+    .container-pokemon-generate {
+        height: auto;
+        padding: 40px 20px;
     }
 
-    .container-pokemon-random #main {
+    .container-pokemon-random #main,
+    .container-pokemon-generate #main {
         max-width: 100%;
         padding: 0 15px 15px 15px;
     }
 
-    .container-pokemon-random #main h1 {
+    .container-pokemon-random #main h1,
+    .container-pokemon-generate #main h1 {
         font-size: 1.8em;
     }
 
-    .container-pokemon-random #main h2 {
+    .container-pokemon-random #main h2,
+    .container-pokemon-generate #main h2 {
         font-size: 1.5em;
     }
 
-    .container-pokemon-random #main p {
+    .container-pokemon-random #main p,
+    .container-pokemon-generate #main p {
         font-size: 1em;
     }
 
-    .container-pokemon-random #main .pokemon-image {
+    .container-pokemon-random #main .pokemon-image,
+    .container-pokemon-generate #main .pokemon-image {
         max-width: 100%;
     }
 
-    .container-pokemon-random #main .button-primary {
+    .container-pokemon-random #main .button-primary,
+    .container-pokemon-generate #main .button-primary,
+    .pokemon-generate-button {
         width: 100%;
         padding: 12px 0;
         font-size: 1.1em;

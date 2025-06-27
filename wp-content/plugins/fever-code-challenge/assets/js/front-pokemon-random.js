@@ -1,93 +1,81 @@
 // Initialize i18n localization
 if (typeof wp !== 'undefined' && wp.i18n && typeof __ === 'undefined') {
-    wp.i18n.setLocaleData({}, 'fever-code-challenge'); // Optionally set if not loaded already
+    wp.i18n.setLocaleData({}, 'fever-code-challenge');
     var __ = wp.i18n.__;
 }
 
-const getFeverCodeChallengePokemonRandomSettings = () => {
+// Get REST settings
+const getFeverCodeChallengePokemonRandomSettings = () => ({
+    restUrl: feverCodeChallengeFrontPokemonRandom?.rest_url || '',
+});
 
-    const restUrl = feverCodeChallengeFrontPokemonRandom.rest_url || '';
-    return { restUrl };
+// Ensure an element exists or create and append it
+const ensureElement = (selector, tagName, className, parent) => {
+    let el = parent.querySelector(selector);
+    if (!el) {
+        el = document.createElement(tagName);
+        if (className) el.className = className;
+        parent.appendChild(el);
+    }
+    return el;
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+// Load and display a random Pokemon
+const loadRandomPokemon = (container) => {
+    const { restUrl } = getFeverCodeChallengePokemonRandomSettings();
+    if (!restUrl) {
+        console.error(__('REST URL is missing.', 'fever-code-challenge'));
+        return;
+    }
 
+    fetch(`${restUrl}?limit=1&order=rand`)
+        .then((response) => response.json())
+        .then((data) => {
+            if (!Array.isArray(data) || data.length === 0) {
+                console.error(__('No Pokemon data found.', 'fever-code-challenge'));
+                return;
+            }
+
+            const pokemon = data[0];
+            console.log('Fetched Pokemon:', pokemon);
+
+            const imageEl = ensureElement('.pokemon-image', 'img', 'pokemon-image', container);
+            const nameEl = ensureElement('h2', 'h2', '', container);
+            const contentEl = ensureElement('p', 'p', '', container);
+            const linkEl = ensureElement('a.pokemon-link', 'a', 'pokemon-link', container);
+
+            imageEl.src = pokemon.featured_image || '';
+            imageEl.alt = pokemon.name || 'Pokemon';
+            nameEl.textContent = pokemon.name || __('Unknown', 'fever-code-challenge');
+            contentEl.textContent = pokemon.content || '';
+            linkEl.href = pokemon.permalink || '#';
+            linkEl.textContent = __('View Details', 'fever-code-challenge');
+        })
+        .catch((error) => {
+            console.error(__('Error fetching random Pokemon:', 'fever-code-challenge'), error);
+        });
+};
+
+// DOM ready
+document.addEventListener('DOMContentLoaded', () => {
     const button = document.querySelector('.pokemon-random-button');
     const container = document.querySelector('.pokemon-details');
 
     if (!container) {
-        console.error('Container ".pokemon-details" not found.');
+        console.error(__('Container ".pokemon-details" not found.', 'fever-code-challenge'));
         return;
     }
 
-    // Create or get image element
-    let imageEl = container.querySelector('.pokemon-image');
-    if (!imageEl) {
-        imageEl = document.createElement('img');
-        imageEl.className = 'pokemon-image';
-        container.appendChild(imageEl);
-    }
-
-    // Create or get name element (h2)
-    let nameEl = container.querySelector('h2');
-    if (!nameEl) {
-        nameEl = document.createElement('h2');
-        container.appendChild(nameEl);
-    }
-
-    // Create or get content element (p)
-    let contentEl = container.querySelector('p');
-    if (!contentEl) {
-        contentEl = document.createElement('p');
-        container.appendChild(contentEl);
-    }
-
-    // Create or get a href element (a)
-    let linkEl = container.querySelector('a');
-    if (!linkEl) {
-        linkEl = document.createElement('a');
-        linkEl.className = 'pokemon-link';
-        linkEl.textContent = 'View Details';
-        linkEl.href = '#'; // Placeholder, will be updated later
-        container.appendChild(linkEl);
-    }
-
-    const loadRandomPokemon = () => {
-
-        const { restUrl } = getFeverCodeChallengePokemonRandomSettings();
-
-        fetch(`${restUrl}?limit=1&order=rand`)
-            .then(response => response.json())
-            .then(data => {
-                if (!Array.isArray(data) || data.length === 0) {
-                    console.error('No Pokemon data found');
-                    return;
-                }
-
-                const pokemon = data[0];
-                console.log('Fetched Pokemon:', pokemon);
-
-                imageEl.src = pokemon.featured_image || '';
-                imageEl.alt = pokemon.name || 'Pokemon';
-
-                nameEl.textContent = pokemon.name || 'Unknown';
-                contentEl.textContent = pokemon.content || '';
-
-                linkEl.href = pokemon.permalink || '#';
-            })
-            .catch(error => console.error('Error fetching random Pokemon:', error));
-    };
-
     // Load on page load
-    loadRandomPokemon();
+    loadRandomPokemon(container);
 
     // Load on button click
     if (button) {
-        button.addEventListener('click', event => {
+        button.addEventListener('click', (event) => {
             event.preventDefault();
-            loadRandomPokemon();
+            loadRandomPokemon(container);
         });
     } else {
-        console.warn('Button ".pokemon-random-button" not found.');
+        console.warn(__('Button ".pokemon-random-button" not found.', 'fever-code-challenge'));
     }
 });

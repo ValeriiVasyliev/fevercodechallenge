@@ -21,7 +21,7 @@ if ( function_exists( 'get_header' ) ) {
 				<main class="site-main" id="main">
 
 					<div class="pokemon-details"></div>
-					<form method="post" action="<?php echo esc_url( home_url( '/generate' ) ); ?>">
+					<form method="post" action="<?php echo esc_url( home_url( '/random' ) ); ?>">
 						<button type="submit" class="button button-primary pokemon-random-button">
 							<?php esc_html_e( 'Generate Another Random Pokemon', 'fever-code-challenge' ); ?>
 					</form>

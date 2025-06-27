@@ -69,6 +69,36 @@ class PokemonGenerate {
 	public function maybe_generate_pokemon(): void {
 		if ( get_query_var( 'generate_pokemon' ) ) {
 
+			if ( FEVER_CODE_CHALLENGE_DEBUG ) {
+				wp_register_script(
+					'fever_code_challenge-front-pokemon-generate',
+					$this->plugin->plugin_url() . '/assets/js/front-pokemon-generate.js',
+					[ 'wp-i18n' ],
+					filemtime( $this->plugin->plugin_dir() . '/assets/js/front-pokemon-generate.js' ),
+					true
+				);
+			} else {
+				wp_register_script(
+					'fever_code_challenge-front-pokemon-generate',
+					$this->plugin->plugin_url() . '/dist/front-pokemon-generate.js',
+					[ 'wp-i18n' ],
+					filemtime( $this->plugin->plugin_dir() . '/dist/front-pokemon-generate.js', ),
+					true
+				);
+			}
+
+			// Localize the script with nonce and action.
+			wp_localize_script(
+				'fever_code_challenge-front-pokemon-generate',
+				'feverCodeChallengeFrontPokemonGenerate',
+				[
+					'ajax_url' => admin_url( 'admin-ajax.php' ),
+					'nonce'    => wp_create_nonce( 'create_new_pokemon' ),
+				]
+			);
+
+			wp_enqueue_script( 'fever_code_challenge-front-pokemon-generate' );
+
 			$template = locate_template( 'fever-code-challenge/generate-pokemon.php' );
 			if ( ! $template ) {
 				$template = $this->plugin->plugin_dir() . '/templates/generate-pokemon.php';

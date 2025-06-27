@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-06-26T19:43:29+00:00\n"
+"POT-Creation-Date: 2025-06-27T11:16:47+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fever-code-challenge\n"
@@ -30,50 +30,50 @@ msgstr ""
 msgid "https://www.codeable.io/developers/valerii-vasyliev/?ref=OaT0y"
 msgstr ""
 
-#: src/Admin.php:62
-msgid "Featured Image"
-msgstr ""
-
 #: src/Admin.php:79
-msgid "No Image"
-msgstr ""
-
-#: src/Admin.php:130
 msgid "Click the button below to load a Pokémon from the API."
 msgstr ""
 
-#: src/Admin.php:133
+#: src/Admin.php:82
 msgid "Load Pokémon from API"
 msgstr ""
 
-#: src/Admin.php:187
+#: src/Admin.php:136
 msgid "You do not have permission to create a Pokemon."
 msgstr ""
 
-#: src/Admin.php:197
+#: src/Admin.php:146
 msgid "Invalid nonce."
 msgstr ""
 
-#: src/Admin.php:207
+#: src/Admin.php:156
 msgid "Failed to retrieve Pokemon list."
 msgstr ""
 
-#: src/Admin.php:221
+#: src/Admin.php:170
 msgid "Failed to retrieve Pokemon details."
 msgstr ""
 
 #. translators: %s is either "create" or "update".
-#: src/Admin.php:260
+#: src/Admin.php:209
 #, php-format
 msgid "Failed to %s Pokemon post."
 msgstr ""
 
-#: src/Admin.php:274
+#: src/Admin.php:223
 msgid "Failed to download Pokemon image."
 msgstr ""
 
-#: src/Admin.php:299
+#: src/Admin.php:253
 msgid "Pokemon created successfully."
+msgstr ""
+
+#: src/Admin.php:272
+msgid "Featured Image"
+msgstr ""
+
+#: src/Admin.php:295
+msgid "No Image"
 msgstr ""
 
 #: src/Plugin.php:139
@@ -132,11 +132,20 @@ msgstr ""
 msgid "Pokémon not found."
 msgstr ""
 
+#: templates/generate-pokemon.php:26
+msgid "You do not have permission to generate Pokemon. Please log in with an account that has the appropriate permissions."
+msgstr ""
+
+#: templates/generate-pokemon.php:32
+msgid "Generate Pokemon from API"
+msgstr ""
+
 #: templates/random-pokemon.php:26
 msgid "Generate Another Random Pokemon"
 msgstr ""
 
 #: assets/js/admin.js:24
+#: assets/js/front-pokemon-generate.js:29
 msgid "Missing base URL or nonce."
 msgstr ""
 
@@ -145,17 +154,57 @@ msgid "Pokemon created successfully!"
 msgstr ""
 
 #: assets/js/admin.js:49
+#: assets/js/front-pokemon-generate.js:57
 msgid "Unknown error"
 msgstr ""
 
 #: assets/js/admin.js:50
+#: assets/js/front-pokemon-generate.js:58
+#: assets/js/front-pokemon-generate.js:59
 msgid "Failed to create Pokemon:"
 msgstr ""
 
 #: assets/js/admin.js:54
+#: assets/js/front-pokemon-generate.js:75
 msgid "AJAX error:"
 msgstr ""
 
 #: assets/js/admin.js:55
+#: assets/js/front-pokemon-generate.js:76
 msgid "AJAX request failed."
+msgstr ""
+
+#: assets/js/front-pokemon-generate.js:37
+#: assets/js/front-pokemon-random.js:65
+msgid "Container \".pokemon-details\" not found."
+msgstr ""
+
+#: assets/js/front-pokemon-generate.js:69
+#: assets/js/front-pokemon-random.js:49
+msgid "Unknown"
+msgstr ""
+
+#: assets/js/front-pokemon-generate.js:72
+#: assets/js/front-pokemon-random.js:52
+msgid "View Details"
+msgstr ""
+
+#: assets/js/front-pokemon-generate.js:90
+msgid "Button \".pokemon-generate-button\" not found."
+msgstr ""
+
+#: assets/js/front-pokemon-random.js:27
+msgid "REST URL is missing."
+msgstr ""
+
+#: assets/js/front-pokemon-random.js:35
+msgid "No Pokemon data found."
+msgstr ""
+
+#: assets/js/front-pokemon-random.js:55
+msgid "Error fetching random Pokemon:"
+msgstr ""
+
+#: assets/js/front-pokemon-random.js:79
+msgid "Button \".pokemon-random-button\" not found."
 msgstr ""

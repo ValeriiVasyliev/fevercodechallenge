@@ -51,68 +51,17 @@ class Admin {
 		// Handle AJAX request to create a new Pokemon.
 		add_action( 'wp_ajax_create_new_pokemon', [ $this, 'handle_create_new_pokemon' ] );
 
-		// Add image to first column in the Pokemon list table.
-		add_filter(
-			'manage_pokemon_posts_columns',
-			function ( $columns ) {
-				// Add a new column for the featured image before the title column.
-				$new_columns = [];
-				foreach ( $columns as $key => $value ) {
-					if ( 'title' === $key ) {
-						$new_columns['featured_image'] = esc_html__( 'Featured Image', 'fever-code-challenge' );
-					}
-					$new_columns[ $key ] = $value;
-				}
-				return $new_columns;
-			}
-		);
+		// Add image column to the Pokemon list table.
+		add_filter( 'manage_pokemon_posts_columns', [ $this, 'fever_add_featured_image_column' ] );
 
-		add_action(
-			'manage_pokemon_posts_custom_column',
-			function ( $column, $post_id ) {
-				if ( 'featured_image' === $column ) {
-					// Display the featured image.
-					$thumbnail = get_the_post_thumbnail( $post_id, 'thumbnail' );
-					if ( $thumbnail ) {
-						echo wp_kses_post( $thumbnail );
-					} else {
-						echo esc_html__( 'No Image', 'fever-code-challenge' );
-					}
-				}
-			},
-			10,
-			2
-		);
+		// Output featured image in the custom column.
+		add_action( 'manage_pokemon_posts_custom_column', [ $this, 'fever_show_featured_image_column' ], 10, 2 );
 
-		// Add small size for the featured image column.
-		add_filter(
-			'post_thumbnail_html',
-			function ( $html, $post_id, $post_thumbnail_id, $size, $attr ) {
-				if ( 'thumbnail' === $size ) {
-					// Add a class to the image for styling.
-					$html = str_replace( '<img', '<img class="pokemon-thumbnail"', $html );
-				}
-				return $html;
-			},
-			10,
-			5
-		);
+		// Add class to the thumbnail image.
+		add_filter( 'post_thumbnail_html', [ $this, 'fever_add_thumbnail_class' ], 10, 5 );
 
-		// Set column .column-featured_image with 100px width.
-		add_action(
-			'admin_head',
-			function () {
-				echo '<style>
-					.column-featured_image {
-						width: 200px;
-					}
-					.pokemon-thumbnail {
-						max-width: 100%;
-						height: auto;
-					}
-				</style>';
-			}
-		);
+		// Add custom styles for the admin column.
+		add_action( 'admin_head', [ $this, 'fever_add_admin_column_styles' ] );
 	}
 
 	/**
@@ -293,6 +242,11 @@ class Admin {
 			update_post_meta( $post_id, $key, $value );
 		}
 
+		// Prepare data for response.
+		$data['featured_image'] = get_the_post_thumbnail_url( $post_id, 'thumbnail' );
+		$data['post_id']        = $post_id;
+		$data['permalink']      = get_permalink( $post_id );
+
 		// Send final success response.
 		wp_send_json_success(
 			[
@@ -300,5 +254,84 @@ class Admin {
 				'pokemon' => $data,
 			]
 		);
+	}
+
+	/**
+	 * Adds a featured image column to the Pokemon posts list table.
+	 *
+	 * This function adds a new column for featured images after the title column
+	 * in the WordPress admin Pokemon list view.
+	 *
+	 * @param array $columns The existing columns in the posts table
+	 * @return array Modified array of columns with the featured image column added
+	 */
+	public function fever_add_featured_image_column( $columns ) {
+		$new_columns = [];
+		foreach ( $columns as $key => $value ) {
+			if ( 'title' === $key ) {
+				$new_columns['featured_image'] = esc_html__( 'Featured Image', 'fever-code-challenge' );
+			}
+			$new_columns[ $key ] = $value;
+		}
+		return $new_columns;
+	}
+
+	/**
+	 * Displays the featured image in the custom column for each Pokemon post.
+	 *
+	 * This function is called for each row in the Pokemon posts table when displaying
+	 * the 'featured_image' column. It shows either the post's thumbnail image
+	 * or a "No Image" message if no featured image is set.
+	 *
+	 * @param string $column The name of the column being displayed
+	 * @param int    $post_id The ID of the current post
+	 */
+	public function fever_show_featured_image_column( $column, $post_id ) {
+		if ( 'featured_image' === $column ) {
+			$thumbnail = get_the_post_thumbnail( $post_id, 'thumbnail' );
+			if ( $thumbnail ) {
+				echo wp_kses_post( $thumbnail );
+			} else {
+				echo esc_html__( 'No Image', 'fever-code-challenge' );
+			}
+		}
+	}
+
+	/**
+	 * Adds a custom CSS class to Pokemon thumbnail images.
+	 *
+	 * This function modifies the HTML output of post thumbnails, adding the
+	 * 'pokemon-thumbnail' class to images when they are displayed at thumbnail size.
+	 *
+	 * @param string $html The thumbnail HTML
+	 * @param int    $post_id The post ID
+	 * @param int    $post_thumbnail_id The thumbnail attachment ID
+	 * @param string $size The size of the image being displayed
+	 * @param array  $attr Additional attributes for the image
+	 * @return string Modified HTML with the additional class
+	 */
+	public function fever_add_thumbnail_class( $html, $post_id, $post_thumbnail_id, $size, $attr ) {
+		if ( 'thumbnail' === $size ) {
+			$html = str_replace( '<img', '<img class="pokemon-thumbnail"', $html );
+		}
+		return $html;
+	}
+
+	/**
+	 * Adds custom CSS styles for the featured image column in the admin interface.
+	 *
+	 * This function outputs inline CSS to control the width of the featured image column
+	 * and ensure proper sizing of Pokemon thumbnail images within the admin interface.
+	 */
+	public function fever_add_admin_column_styles() {
+		echo '<style>
+        .column-featured_image {
+            width: 200px;
+        }
+        .pokemon-thumbnail {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>';
 	}
 }

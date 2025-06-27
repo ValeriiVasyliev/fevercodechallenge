@@ -165,9 +165,4 @@ class Plugin {
 
 		register_post_type( 'pokemon', $args );
 	}
-
-	protected function getPluginDir(): string {
-		return dirname( $this->plugin_file_path );
-	}
-
 }
