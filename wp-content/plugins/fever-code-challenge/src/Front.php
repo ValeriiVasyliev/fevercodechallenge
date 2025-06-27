@@ -48,7 +48,7 @@ class Front {
 	protected function register_hooks(): void {
 
 		// Enqueue front-end assets.
-		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_assets' ] );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 	}
 
 	/**
@@ -56,20 +56,11 @@ class Front {
 	 */
 	public function enqueue_assets(): void {
 
-		if ( FEVER_CODE_CHALLENGE_DEBUG ) {
-			wp_enqueue_style(
-				'fever-code-challenge-style',
-				$this->plugin->plugin_url() . '/assets/css/style.css',
-				[],
-				filemtime( $this->plugin->plugin_dir() . '/assets/css/style.css' )
-			);
-		} else {
-			wp_enqueue_style(
-				'fever-code-challenge-style',
-				$this->plugin->plugin_url() . '/assets/css/style.css',
-				[],
-				filemtime( $this->plugin->plugin_dir() . '/assets/css/style.css' )
-			);
-		}
+		wp_enqueue_style(
+			'fever-code-challenge-style',
+			$this->plugin->plugin_url() . '/assets/css/style.css',
+			array(),
+			filemtime( $this->plugin->plugin_dir() . '/assets/css/style.css' )
+		);
 	}
 }

@@ -32,6 +32,19 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
  * @return void
  */
 function fever_code_challenge_activate() {
+
+	// Rewrite rules for the custom pages.
+	add_rewrite_rule( '^generate/?$', 'index.php?generate_pokemon=1', 'top' );
+	add_rewrite_rule( '^random/?$', 'index.php?random_pokemon=1', 'top' );
+	add_rewrite_rule( '^pokemon-list/?$', 'index.php?pokemon_list=1', 'top' );
+
+	// Custom rule for single pokemon posts with slug.
+	add_rewrite_rule(
+		'^pokemon/([^/]+)/?$',
+		'index.php?pokemon=$matches[1]',
+		'top'
+	);
+
 	// Flush rewrite rules on activation.
 	flush_rewrite_rules();
 }
@@ -47,9 +60,6 @@ function fever_code_challenge_deactivate() {
 	flush_rewrite_rules();
 }
 register_deactivation_hook( __FILE__, 'FeverCodeChallenge\fever_code_challenge_deactivate' );
-
-// Plugin debug mode.
-define( 'FEVER_CODE_CHALLENGE_DEBUG', true );
 
 // Get plugin path.
 define( 'FEVER_CODE_CHALLENGE_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );

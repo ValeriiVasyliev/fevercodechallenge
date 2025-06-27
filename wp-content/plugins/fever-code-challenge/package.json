@@ -5,18 +5,24 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js --mode production"
+    "build": "webpack --config webpack.config.js --mode production",
+    "watch": "webpack --config webpack.config.js --watch"
   },
   "author": "Your Name",
   "license": "MIT",
   "devDependencies": {
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4",
+    "@babel/preset-typescript": "^7.27.1",
     "css-loader": "^6.8.1",
-    "style-loader": "^3.3.2",
+    "css-minimizer-webpack-plugin": "^3.0.2",
     "mini-css-extract-plugin": "^2.7.8",
+    "style-loader": "^3.3.2",
     "terser-webpack-plugin": "^5.3.8",
-    "css-minimizer-webpack-plugin": "^3.0.2"
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@wordpress/i18n": "^5.26.0"
+  }
 }

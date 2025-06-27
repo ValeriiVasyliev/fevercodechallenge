@@ -73,7 +73,7 @@ class Plugin {
 		$this->load_plugin_textdomain();
 
 		// Register custom post type for Pokemon.
-		add_action( 'init', [ $this, 'register_pokemon_post_type' ] );
+		add_action( 'init', array( $this, 'register_pokemon_post_type' ) );
 	}
 
 	/**
@@ -135,7 +135,7 @@ class Plugin {
 	 * @return void
 	 */
 	public function register_pokemon_post_type(): void {
-		$labels = [
+		$labels = array(
 			'name'               => __( 'Pokemons', 'fever-code-challenge' ),
 			'singular_name'      => __( 'Pokemon', 'fever-code-challenge' ),
 			'add_new'            => __( 'Add New', 'fever-code-challenge' ),
@@ -146,22 +146,22 @@ class Plugin {
 			'search_items'       => __( 'Search Pokemons', 'fever-code-challenge' ),
 			'not_found'          => __( 'No Pokemons found', 'fever-code-challenge' ),
 			'not_found_in_trash' => __( 'No Pokemons found in Trash', 'fever-code-challenge' ),
-		];
+		);
 
-		$args = [
+		$args = array(
 			'labels'             => $labels,
 			'public'             => true,
 			'publicly_queryable' => true,
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => [ 'slug' => 'pokemon' ],
+			'rewrite'            => array( 'slug' => 'pokemon' ),
 			'capability_type'    => 'post',
-			'has_archive'        => true,
+			'has_archive'        => false,
 			'hierarchical'       => false,
 			'menu_position'      => 5,
-			'supports'           => [ 'title', 'editor', 'thumbnail', 'custom-fields' ],
-		];
+			'supports'           => array( 'title', 'editor', 'thumbnail', 'custom-fields' ),
+		);
 
 		register_post_type( 'pokemon', $args );
 	}

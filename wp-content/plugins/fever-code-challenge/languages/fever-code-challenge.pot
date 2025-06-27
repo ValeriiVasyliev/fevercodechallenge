@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-06-27T11:16:47+00:00\n"
+"POT-Creation-Date: 2025-06-27T16:46:23+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fever-code-challenge\n"
@@ -38,41 +38,41 @@ msgstr ""
 msgid "Load Pokémon from API"
 msgstr ""
 
-#: src/Admin.php:136
+#: src/Admin.php:126
 msgid "You do not have permission to create a Pokemon."
 msgstr ""
 
-#: src/Admin.php:146
+#: src/Admin.php:136
 msgid "Invalid nonce."
 msgstr ""
 
-#: src/Admin.php:156
+#: src/Admin.php:146
 msgid "Failed to retrieve Pokemon list."
 msgstr ""
 
-#: src/Admin.php:170
+#: src/Admin.php:160
 msgid "Failed to retrieve Pokemon details."
 msgstr ""
 
 #. translators: %s is either "create" or "update".
-#: src/Admin.php:209
+#: src/Admin.php:199
 #, php-format
 msgid "Failed to %s Pokemon post."
 msgstr ""
 
-#: src/Admin.php:223
+#: src/Admin.php:213
 msgid "Failed to download Pokemon image."
 msgstr ""
 
-#: src/Admin.php:253
+#: src/Admin.php:243
 msgid "Pokemon created successfully."
 msgstr ""
 
-#: src/Admin.php:272
+#: src/Admin.php:262
 msgid "Featured Image"
 msgstr ""
 
-#: src/Admin.php:295
+#: src/Admin.php:285
 msgid "No Image"
 msgstr ""
 
@@ -124,11 +124,15 @@ msgstr ""
 msgid "Order of the results: title, rand, or date"
 msgstr ""
 
-#: src/REST.php:146
-msgid "No Pokémon found."
+#: src/REST.php:85
+msgid "Filter by Pokémon type"
 msgstr ""
 
-#: src/REST.php:206
+#: src/REST.php:90
+msgid "Page number for pagination"
+msgstr ""
+
+#: src/REST.php:252
 msgid "Pokémon not found."
 msgstr ""
 
@@ -138,6 +142,18 @@ msgstr ""
 
 #: templates/generate-pokemon.php:32
 msgid "Generate Pokemon from API"
+msgstr ""
+
+#: templates/pokemon-list.php:21
+msgid "Filter Pokémon by Type"
+msgstr ""
+
+#: templates/pokemon-list.php:23
+msgid "Filter by Type:"
+msgstr ""
+
+#: templates/pokemon-list.php:26
+msgid "All Types"
 msgstr ""
 
 #: templates/random-pokemon.php:26

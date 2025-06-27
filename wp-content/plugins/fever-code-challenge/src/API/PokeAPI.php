@@ -32,10 +32,10 @@ class PokeAPI implements IAPI {
 	 */
 	public function get_list( int $limit = 20, int $offset = 0, bool $force = false ): array {
 		$url = add_query_arg(
-			[
+			array(
 				'limit'  => $limit,
 				'offset' => $offset,
-			],
+			),
 			self::BASE_ENDPOINT . 'pokemon'
 		);
 
@@ -56,20 +56,20 @@ class PokeAPI implements IAPI {
 		$species = $this->get_species( $name_or_id, $force );
 
 		if ( empty( $details ) || empty( $species ) ) {
-			return [];
+			return array();
 		}
 
 		// Image.
 		$image_url = $details['sprites']['other']['official-artwork']['front_default'] ?? '';
 
 		// Types.
-		$types          = array_map( fn( $t ) => $t['type']['name'] ?? '', $details['types'] ?? [] );
+		$types          = array_map( fn( $t ) => $t['type']['name'] ?? '', $details['types'] ?? array() );
 		$primary_type   = $types[0] ?? '';
 		$secondary_type = $types[1] ?? '';
 
 		// Description.
 		$description = '';
-		foreach ( $species['flavor_text_entries'] ?? [] as $entry ) {
+		foreach ( $species['flavor_text_entries'] ?? array() as $entry ) {
 			if ( 'en' === $entry['language']['name'] ) { // Yoda condition applied.
 				$description = $entry['flavor_text'];
 				break;
@@ -77,13 +77,13 @@ class PokeAPI implements IAPI {
 		}
 
 		// Pokedex numbers.
-		$pokedex_numbers = [];
-		foreach ( $species['pokedex_numbers'] ?? [] as $dex_info ) {
+		$pokedex_numbers = array();
+		foreach ( $species['pokedex_numbers'] ?? array() as $dex_info ) {
 			if ( ! empty( $dex_info['entry_number'] ) && ! empty( $dex_info['pokedex']['name'] ) ) {
-				$pokedex_numbers[] = [
+				$pokedex_numbers[] = array(
 					'entry_number' => $dex_info['entry_number'],
 					'pokedex_name' => $dex_info['pokedex']['name'],
-				];
+				);
 			}
 		}
 
@@ -95,7 +95,7 @@ class PokeAPI implements IAPI {
 		$oldest_dex = $pokedex_numbers[0]['entry_number'] ?? null;
 		$newest_dex = $pokedex_numbers[ count( $pokedex_numbers ) - 1 ]['entry_number'] ?? null;
 
-		return [
+		return array(
 			'name'            => $details['name'] ?? '',
 			'image_url'       => $image_url,
 			'weight'          => $details['weight'] ?? 0,
@@ -105,7 +105,7 @@ class PokeAPI implements IAPI {
 			'pokedex_numbers' => $pokedex_numbers,
 			'oldest_dex'      => $oldest_dex,
 			'newest_dex'      => $newest_dex,
-		];
+		);
 	}
 
 	/**
@@ -144,7 +144,7 @@ class PokeAPI implements IAPI {
 	 */
 	public function sanitize_data( $data ) {
 		if ( is_array( $data ) ) {
-			$filtered = [];
+			$filtered = array();
 
 			foreach ( $data as $key => $value ) {
 				$sanitized_key              = is_string( $key ) ? $this->sanitize_data( $key ) : $key;
@@ -199,10 +199,10 @@ class PokeAPI implements IAPI {
 			}
 
 			// Return empty array if request failed or data was invalid.
-			return [];
+			return array();
 		}
 
 		// Ensure cached value is array.
-		return is_array( $cached ) ? $cached : [];
+		return is_array( $cached ) ? $cached : array();
 	}
 }

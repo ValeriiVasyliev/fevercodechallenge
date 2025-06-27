@@ -40,16 +40,8 @@ class PokemonRandom {
 	 * Register class hooks.
 	 */
 	protected function hooks(): void {
-		add_action( 'init', [ $this, 'register_rewrite_rule' ] );
-		add_filter( 'query_vars', [ $this, 'add_query_var' ] );
-		add_action( 'template_redirect', [ $this, 'maybe_redirect_random_pokemon' ] );
-	}
-
-	/**
-	 * Register the /random rewrite rule.
-	 */
-	public function register_rewrite_rule(): void {
-		add_rewrite_rule( '^random/?$', 'index.php?random_pokemon=1', 'top' );
+		add_filter( 'query_vars', array( $this, 'add_query_var' ) );
+		add_action( 'template_redirect', array( $this, 'maybe_redirect_random_pokemon' ) );
 	}
 
 	/**
@@ -69,31 +61,21 @@ class PokemonRandom {
 	public function maybe_redirect_random_pokemon(): void {
 		if ( get_query_var( 'random_pokemon' ) ) {
 
-			if ( FEVER_CODE_CHALLENGE_DEBUG ) {
-				wp_register_script(
-					'fever_code_challenge-front-pokemon-random',
-					$this->plugin->plugin_url() . '/assets/js/front-pokemon-random.js',
-					[ 'wp-i18n' ],
-					filemtime( $this->plugin->plugin_dir() . '/assets/js/front-pokemon-random.js' ),
-					true
-				);
-			} else {
-				wp_register_script(
-					'fever_code_challenge-front-pokemon-random',
-					$this->plugin->plugin_url() . '/dist/front-pokemon-random.js',
-					[ 'wp-i18n' ],
-					filemtime( $this->plugin->plugin_dir() . '/dist/front-pokemon-random.js', ),
-					true
-				);
-			}
+			wp_register_script(
+				'fever_code_challenge-front-pokemon-random',
+				$this->plugin->plugin_url() . '/dist/front-pokemon-random.js',
+				array( 'wp-i18n' ),
+				filemtime( $this->plugin->plugin_dir() . '/dist/front-pokemon-random.js', ),
+				true
+			);
 
 			// Localize the script with nonce and action.
 			wp_localize_script(
 				'fever_code_challenge-front-pokemon-random',
 				'feverCodeChallengeFrontPokemonRandom',
-				[
+				array(
 					'rest_url' => rest_url( 'fever-code-challenge/v1/pokemon' ),
-				]
+				)
 			);
 
 			wp_enqueue_script( 'fever_code_challenge-front-pokemon-random' );

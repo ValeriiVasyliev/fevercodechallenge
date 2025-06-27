@@ -31,12 +31,12 @@ const loadRandomPokemon = (container) => {
     fetch(`${restUrl}?limit=1&order=rand`)
         .then((response) => response.json())
         .then((data) => {
-            if (!Array.isArray(data) || data.length === 0) {
+            if (!Array.isArray(data.data) || data.data.length === 0) {
                 console.error(__('No Pokemon data found.', 'fever-code-challenge'));
                 return;
             }
 
-            const pokemon = data[0];
+            const pokemon = data.data[0];
             console.log('Fetched Pokemon:', pokemon);
 
             const imageEl = ensureElement('.pokemon-image', 'img', 'pokemon-image', container);
