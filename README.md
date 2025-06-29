@@ -109,7 +109,7 @@ Once your environment is ready, clone and install the project:
 ```bash
 git clone git@github.com:FeverCodeChallenge/Valerii.Vasyliev.git
 cd Valerii.Vasyliev
-composer create-project valercodes/fever-code-challenge .
+composer build
 ```
 
 This will automatically install:
