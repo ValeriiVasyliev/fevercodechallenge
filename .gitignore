@@ -1,0 +1,133 @@
+/*
+*~
+.svn
+.cvs
+.git
+.listing
+*.bak
+*.swp
+*.log
+plugins/wp-file-cache/cache
+cache
+_wpeprivate
+.cache
+temp
+tmp
+*.tmp
+imagecache*
+uploads*
+*_backup
+gt-cache
+ics-importer-cache
+wp-config.php
+wp-config-ddev\.php
+wp-config-sample.php
+pclzip-*
+
+!.gitattributes
+!composer.json
+!.gitignore
+!wp-content/
+!README.md
+!deploy.php
+!deploy.yml
+!.github/
+!deployment-process.png
+!Wordpress\ Challenge.pdf
+
+# ddev files
+!.ddev/
+
+
+# Ignore everything in the "wp-content" directory, except the "plugins"
+# and "themes" directories.
+wp-content/*
+!wp-content/plugins/
+# !wp-content/themes/
+# !wp-content/mu-plugins/
+
+# Ignore everything in the "wp-content" directory, except the "plugins"
+wp-content/plugins/*
+
+# custom plugin 'vanyoo-ad-packages'
+!wp-content/plugins/fever-code-challenge/
+wp-content/plugins/fever-code-challenge/node_modules/
+wp-content/plugins/fever-code-challenge/vendor/
+wp-content/plugins/fever-code-challenge/deps/
+wp-content/plugins/fever-code-challenge/package-lock.json
+wp-content/plugins/fever-code-challenge/composer.lock
+wp-content/plugins/fever-code-challenge/composer-deps.lock
+wp-content/plugins/fever-code-challenge/.phpcs.cache
+wp-content/plugins/fever-code-challenge/.phpunit.cache/
+wp-content/plugins/fever-code-challenge/coverage/
+wp-content/plugins/fever-code-challenge/coverage.xml
+wp-content/plugins/fever-code-challenge/dummy-plugin-dir/
+
+# Ignore everything in the "themes" directory, except the themes you
+# specify (see the commented-out example for a hint on how to do this.)
+# wp-content/themes/*
+
+# Ignore everything in the "mu-plugins" directory, except the mu-plugins you
+# specify (see the commented-out example for a hint on how to do this.)
+#wp-content/mu-plugins/*
+
+# ignore all files debug.log, debug.log.1, debug.log.2 etc.
+wp-content/debug.log*
+
+# igno mysql dump files
+wp-content/*.sql
+
+# WordPress debugging files
+log.txt
+debug.log
+
+
+# Found in the root of pod-1009
+.a
+
+# known large file types
+*.hqx
+*.bin
+*.exe
+*.dll
+*.deb
+*.dmg
+*.iso
+*.img
+*.msi
+*.msp
+*.msm
+*.mid
+*.midi
+*.kar
+*.mp3
+*.ogg
+*.m4a
+*.ra
+*.3gpp
+*.3gp
+*.mp4
+*.mpeg
+*.mpg
+*.mov
+*.webm
+*.flv
+*.m4v
+*.mng
+*.asx
+*.asf
+*.wmv
+*.avi
+*.zip
+*.tar
+*.tgz
+*.gz
+*.sql
+
+# .idea files
+.idea
+
+# .DS_Store
+.DS_Store
+
+/vendor/
