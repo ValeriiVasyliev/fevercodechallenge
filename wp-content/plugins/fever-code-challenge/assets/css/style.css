@@ -232,3 +232,42 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Pokemon details page styles */
+.pokemon-custom-fields {
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    max-width: 500px;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.pokemon-custom-fields p {
+    margin: 0.5em 0;
+    font-size: 15px;
+    color: #333;
+}
+
+.pokemon-custom-fields strong {
+    color: #555;
+}
+
+.pokemon-oldest-dex {
+    margin-top: 1em;
+    text-align: left;
+}
+
+.pokemon-oldest-dex-button.button {
+    padding: 6px 14px;
+    font-size: 13px;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+
+.pokemon-oldest-dex-button.button:hover {
+    background-color: #e2e2e2;
+}
+

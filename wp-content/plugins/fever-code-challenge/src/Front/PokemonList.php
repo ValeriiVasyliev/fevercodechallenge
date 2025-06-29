@@ -104,25 +104,39 @@ class PokemonList {
 	protected function get_unique_type_meta_values(): array {
 		global $wpdb;
 
-		$meta_keys = array( 'primary_type', 'secondary_type' );
-		$post_type = 'pokemon';
+		$cache_key   = 'fever_unique_pokemon_types';
+		$cache_group = 'fever-code-challenge';
 
+		// Try to get cached result.
+		$cached = wp_cache_get( $cache_key, $cache_group );
+		if ( false !== $cached ) {
+			return $cached;
+		}
+
+		// Prepare SQL with placeholders.
 		$query = $wpdb->prepare(
 			"
-            SELECT DISTINCT pm.meta_value
-            FROM {$wpdb->postmeta} pm
-            INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
-            WHERE (pm.meta_key = %s OR pm.meta_key = %s)
-              AND p.post_type = %s
-              AND p.post_status = 'publish'
-              AND pm.meta_value != ''
-            ORDER BY pm.meta_value ASC
-            ",
-			$meta_keys[0],
-			$meta_keys[1],
-			$post_type
+	SELECT DISTINCT pm.meta_value
+	FROM {$wpdb->postmeta} pm
+	INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+	WHERE (pm.meta_key = %s OR pm.meta_key = %s)
+	  AND p.post_type = %s
+	  AND p.post_status = %s
+	  AND pm.meta_value != ''
+	ORDER BY pm.meta_value ASC
+	",
+			'primary_type',
+			'secondary_type',
+			'pokemon',
+			'publish'
 		);
 
-		return $wpdb->get_col( $query );
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery
+		$results = $wpdb->get_col( $query );
+
+		// Cache for 12 hours.
+		wp_cache_set( $cache_key, $results, $cache_group, 12 * HOUR_IN_SECONDS );
+
+		return $results;
 	}
 }

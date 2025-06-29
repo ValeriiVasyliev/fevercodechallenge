@@ -3,136 +3,147 @@
 namespace FeverCodeChallenge\Tests;
 
 use FeverCodeChallenge\Plugin;
-use FeverCodeChallenge\Admin;
-use FeverCodeChallenge\Front;
-use FeverCodeChallenge\REST;
 use FeverCodeChallenge\Interfaces\IAPI;
-use PHPUnit\Framework\TestCase;
-use Brain\Monkey;
 use Brain\Monkey\Functions;
 
-class PluginTest extends TestCase
-{
-    private Plugin $plugin;
-    private $api;
-    private string $plugin_file_path;
-    private string $plugin_url = 'http://example.com/wp-content/plugins/fever-code-challenge';
-    private string $plugin_dir = '/path/to/plugin';
+class PluginTest extends TestCase {
+	private Plugin $plugin;
+	private IAPI $api;
+	private string $plugin_file_path;
+	private string $plugin_url = 'http://example.com/wp-content/plugins/fever-code-challenge/';
+	private string $plugin_dir = '/path/to/plugin';
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        Monkey\setUp();
+	protected function setUp(): void {
+		parent::setUp();
 
-        // Mock WordPress functions
-        Functions\when('plugin_dir_url')->justReturn($this->plugin_url . '/');
-        Functions\when('plugin_basename')->returnArg();
-        Functions\when('add_action')->justReturn(true);
-        Functions\when('load_plugin_textdomain')->justReturn(true);
-        Functions\when('register_post_type')->justReturn(true);
-        Functions\when('__')->returnArg();
+		// Mock API interface
+		$this->api              = $this->createMock( IAPI::class );
+		$this->plugin_file_path = $this->plugin_dir . '/plugin.php';
 
-        // Mock API interface
-        $this->api = $this->createMock(IAPI::class);
-        $this->plugin_file_path = $this->plugin_dir . '/plugin.php';
+		// Mock WordPress functions
+		Functions\when( 'plugin_dir_url' )->justReturn( $this->plugin_url );
+		Functions\when( 'plugin_basename' )->justReturn( 'fever-code-challenge/plugin.php' );
+		Functions\when( 'untrailingslashit' )->alias(
+			function ( $input ) {
+				return rtrim( $input, '/' );
+			}
+		);
+		Functions\when( '__' )->returnArg();
 
-        // Create plugin instance using a mock that doesn't require dirname()
-        $this->plugin = $this->getMockBuilder(Plugin::class)
-            ->setConstructorArgs([$this->api, $this->plugin_file_path])
-            ->onlyMethods(['getPluginDir'])
-            ->getMock();
+		$this->plugin = new Plugin( $this->api, $this->plugin_file_path );
+	}
 
-        $this->plugin->method('getPluginDir')
-            ->willReturn($this->plugin_dir);
-    }
+	public function testConstruction(): void {
+		$this->assertInstanceOf( Plugin::class, $this->plugin );
+		$this->assertEquals(
+			'http://example.com/wp-content/plugins/fever-code-challenge',
+			$this->plugin->plugin_url()
+		);
+		$this->assertEquals( $this->plugin_dir, $this->plugin->plugin_dir() );
+	}
 
-    protected function tearDown(): void
-    {
-        Monkey\tearDown();
-        parent::tearDown();
-    }
+	public function testInit(): void {
+		Functions\expect( 'add_action' )
+			->once()
+			->with( 'init', array( $this->plugin, 'register_pokemon_post_type' ) );
 
-    public function testConstruction(): void
-    {
-        $this->assertInstanceOf(Plugin::class, $this->plugin);
-    }
+		Functions\expect( 'load_plugin_textdomain' )
+			->once()
+			->with(
+				'fever-code-challenge',
+				false,
+				'fever-code-challenge/../languages/'
+			);
 
-    public function testInit(): void
-    {
-        // Create mocks for the components
-        $adminMock = $this->createMock(Admin::class);
-        $frontMock = $this->createMock(Front::class);
-        $restMock = $this->createMock(REST::class);
+		$this->plugin->init();
+		$this->addToAssertionCount( 1 );
+	}
 
-        // Create a plugin mock that returns our component mocks
-        $pluginMock = $this->getMockBuilder(Plugin::class)
-            ->setConstructorArgs([$this->api, $this->plugin_file_path])
-            ->onlyMethods(['getPluginDir', 'createComponents'])
-            ->getMock();
+	public function testRegisterPokemonPostType(): void {
+		Functions\expect( 'register_post_type' )
+			->once()
+			->with(
+				'pokemon',
+				$this->callback(
+					function ( $args ) {
+						return isset( $args['labels'] ) &&
+						isset( $args['public'] ) &&
+						isset( $args['publicly_queryable'] ) &&
+						$args['rewrite']['slug'] === 'pokemon' &&
+						in_array( 'thumbnail', $args['supports'] ) &&
+						in_array( 'custom-fields', $args['supports'] );
+					}
+				)
+			);
 
-        $pluginMock->method('getPluginDir')->willReturn($this->plugin_dir);
-        $pluginMock->method('createComponents')->willReturn([
-            $adminMock,
-            $frontMock,
-            $restMock
-        ]);
+		$this->plugin->register_pokemon_post_type();
+		$this->addToAssertionCount( 1 );
+	}
 
-        // Set expectations for init calls
-        $adminMock->expects($this->once())->method('init');
-        $frontMock->expects($this->once())->method('init');
-        $restMock->expects($this->once())->method('init');
+	public function testLoadPluginTextdomainWithExistingDomain(): void {
+		$GLOBALS['l10n']['fever-code-challenge'] = true;
 
-        // Execute init
-        $pluginMock->init();
-    }
+		Functions\expect( 'load_plugin_textdomain' )->never();
 
-    public function testPluginUrl(): void
-    {
-        $this->assertEquals($this->plugin_url, $this->plugin->plugin_url());
-    }
+		$reflection = new \ReflectionClass( Plugin::class );
+		$method     = $reflection->getMethod( 'load_plugin_textdomain' );
+		$method->setAccessible( true );
+		$method->invoke( $this->plugin );
 
-    public function testPluginDir(): void
-    {
-        $this->assertEquals($this->plugin_dir, $this->plugin->plugin_dir());
-    }
+		unset( $GLOBALS['l10n']['fever-code-challenge'] );
+		$this->addToAssertionCount( 1 );
+	}
 
-    public function testGetPath(): void
-    {
-        $subpath = 'subfolder/file.php';
-        $expected = $this->plugin_dir . '/' . $subpath;
+	public function testLoadPluginTextdomainWithoutExistingDomain(): void {
+		Functions\expect( 'load_plugin_textdomain' )
+			->once()
+			->with(
+				'fever-code-challenge',
+				false,
+				'fever-code-challenge/../languages/'
+			);
 
-        $this->assertEquals($expected, $this->plugin->get_path($subpath));
-        $this->assertEquals($expected, $this->plugin->get_path('/' . $subpath));
-        $this->assertEquals($this->plugin_dir . '/', $this->plugin->get_path());
-    }
+		$reflection = new \ReflectionClass( Plugin::class );
+		$method     = $reflection->getMethod( 'load_plugin_textdomain' );
+		$method->setAccessible( true );
+		$method->invoke( $this->plugin );
+		$this->addToAssertionCount( 1 );
+	}
 
-    public function testGetApi(): void
-    {
-        $this->assertSame($this->api, $this->plugin->get_api());
-    }
+	public function testGetPath(): void {
+		$expected = $this->plugin_dir . '/subfolder/file.php';
 
-    public function testRegisterPokemonPostType(): void
-    {
-        Functions\expect('register_post_type')
-            ->once()
-            ->with('pokemon', $this->callback(function($args) {
-                return isset($args['labels']) &&
-                    isset($args['public']) &&
-                    isset($args['publicly_queryable']);
-            }));
+		// Test with leading slash
+		$this->assertEquals( $expected, $this->plugin->get_path( '/subfolder/file.php' ) );
 
-        $this->plugin->register_pokemon_post_type();
-    }
+		// Test without leading slash
+		$this->assertEquals( $expected, $this->plugin->get_path( 'subfolder/file.php' ) );
 
-    public function testRegisterHooks(): void
-    {
-        Functions\expect('add_action')
-            ->once()
-            ->with('init', [$this->plugin, 'register_pokemon_post_type']);
+		// Test empty path
+		$this->assertEquals( $this->plugin_dir . '/', $this->plugin->get_path() );
+	}
 
-        $reflection = new \ReflectionClass(get_class($this->plugin));
-        $method = $reflection->getMethod('register_hooks');
-        $method->setAccessible(true);
-        $method->invoke($this->plugin);
-    }
+	public function testGetApi(): void {
+		$this->assertSame( $this->api, $this->plugin->get_api() );
+	}
+
+	public function testRegisterHooks(): void {
+		Functions\expect( 'load_plugin_textdomain' )
+			->once()
+			->with(
+				'fever-code-challenge',
+				false,
+				'fever-code-challenge/../languages/'
+			);
+
+		Functions\expect( 'add_action' )
+			->once()
+			->with( 'init', array( $this->plugin, 'register_pokemon_post_type' ) );
+
+		$reflection = new \ReflectionClass( Plugin::class );
+		$method     = $reflection->getMethod( 'register_hooks' );
+		$method->setAccessible( true );
+		$method->invoke( $this->plugin );
+		$this->addToAssertionCount( 1 );
+	}
 }

@@ -25,10 +25,12 @@
     "scripts": {
         "post-create-project-cmd": [
             "composer install",
+            "composer install --working-dir=wp-content/plugins/fever-code-challenge",
             "wp core download --version=6.8.1"
         ],
         "build": [
             "composer install",
+            "composer install --working-dir=wp-content/plugins/fever-code-challenge",
             "wp core download --version=6.8.1"
         ]
     },

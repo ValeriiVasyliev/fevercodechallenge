@@ -55,7 +55,7 @@ class PokeAPI implements IAPI {
 		$details = $this->get_details( $name_or_id, $force );
 		$species = $this->get_species( $name_or_id, $force );
 
-		if ( empty( $details ) || empty( $species ) ) {
+		if ( empty( $details ) ) {
 			return array();
 		}
 

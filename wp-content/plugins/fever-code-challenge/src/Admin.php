@@ -44,23 +44,11 @@ class Admin {
 	 */
 	protected function register_hooks(): void {
 		add_action( 'load-edit.php', array( $this, 'add_form_create_pokemon' ) );
-
-		// Enqueue scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-
-		// Handle AJAX request to create a new Pokemon.
 		add_action( 'wp_ajax_create_new_pokemon', array( $this, 'handle_create_new_pokemon' ) );
-
-		// Add image column to the Pokemon list table.
 		add_filter( 'manage_pokemon_posts_columns', array( $this, 'fever_add_featured_image_column' ) );
-
-		// Output featured image in the custom column.
 		add_action( 'manage_pokemon_posts_custom_column', array( $this, 'fever_show_featured_image_column' ), 10, 2 );
-
-		// Add class to the thumbnail image.
 		add_filter( 'post_thumbnail_html', array( $this, 'fever_add_thumbnail_class' ), 10, 5 );
-
-		// Add custom styles for the admin column.
 		add_action( 'admin_head', array( $this, 'fever_add_admin_column_styles' ) );
 	}
 
@@ -69,8 +57,6 @@ class Admin {
 	 */
 	public function add_form_create_pokemon(): void {
 		$screen = get_current_screen();
-
-		// Check if we are on the edit.php screen for the 'pokemon' post type.
 		if ( 'pokemon' === $screen->post_type ) {
 			add_action(
 				'all_admin_notices',
@@ -100,9 +86,8 @@ class Admin {
 			true
 		);
 
-		// Localize the script with nonce and action.
 		wp_localize_script(
-			'fever_code_challenge-admin',
+			'fever_code_challenge_admin',
 			'feverCodeChallengeAdmin',
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
@@ -110,7 +95,7 @@ class Admin {
 			)
 		);
 
-		wp_enqueue_script( 'fever_code_challenge-admin' );
+		wp_enqueue_script( 'fever_code_challenge_admin' );
 	}
 
 	/**
@@ -119,7 +104,6 @@ class Admin {
 	 * @return void
 	 */
 	public function handle_create_new_pokemon(): void {
-		// Check if the user has permission to create a Pokemon.
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			wp_send_json_error(
 				array(
@@ -128,7 +112,6 @@ class Admin {
 			);
 		}
 
-		// Check nonce for security.
 		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
 		if ( ! wp_verify_nonce( $nonce, 'create_new_pokemon' ) ) {
 			wp_send_json_error(
@@ -138,8 +121,7 @@ class Admin {
 			);
 		}
 
-		// Get list of Pokemon.
-		$pokemons = $this->plugin->get_api()->get_list( 100000, 0, true );
+		$pokemons = $this->plugin->get_api()->get_list( 100000, 0 );
 		if ( empty( $pokemons ) || ! is_array( $pokemons['results'] ) ) {
 			wp_send_json_error(
 				array(
@@ -148,12 +130,10 @@ class Admin {
 			);
 		}
 
-		// Pick random.
 		$random_index = array_rand( $pokemons['results'] );
 		$pokemon_name = $pokemons['results'][ $random_index ]['name'];
+		$data         = $this->plugin->get_api()->get_pokemon_data( $pokemon_name );
 
-		// Get structured data from API.
-		$data = $this->plugin->get_api()->get_pokemon_data( $pokemon_name, true );
 		if ( empty( $data ) ) {
 			wp_send_json_error(
 				array(
@@ -162,8 +142,7 @@ class Admin {
 			);
 		}
 
-		// Try to find existing Pokémon post by title.
-		$query = new WP_Query(
+		$query               = new WP_Query(
 			array(
 				'post_type'      => 'pokemon',
 				'title'          => $data['name'],
@@ -172,7 +151,6 @@ class Admin {
 				'fields'         => 'ids',
 			)
 		);
-
 		$existing_pokemon_id = $query->posts[0] ?? 0;
 
 		$post_data = array(
@@ -203,7 +181,6 @@ class Admin {
 			);
 		}
 
-		// Handle featured image (only update if external URL changed).
 		if ( ! empty( $data['image_url'] ) ) {
 			$existing_image_url = get_post_meta( $post_id, '_external_image_url', true );
 			if ( $data['image_url'] !== $existing_image_url ) {
@@ -218,7 +195,6 @@ class Admin {
 			}
 		}
 
-		// Update custom fields.
 		$custom_fields = array(
 			'weight'          => $data['weight'],
 			'primary_type'    => $data['primary_type'],
@@ -232,12 +208,10 @@ class Admin {
 			update_post_meta( $post_id, $key, $value );
 		}
 
-		// Prepare data for response.
 		$data['featured_image'] = get_the_post_thumbnail_url( $post_id, 'full' );
 		$data['post_id']        = $post_id;
 		$data['permalink']      = get_permalink( $post_id );
 
-		// Send final success response.
 		wp_send_json_success(
 			array(
 				'message' => esc_html__( 'Pokemon created successfully.', 'fever-code-challenge' ),
@@ -249,11 +223,8 @@ class Admin {
 	/**
 	 * Adds a featured image column to the Pokemon posts list table.
 	 *
-	 * This function adds a new column for featured images after the title column
-	 * in the WordPress admin Pokemon list view.
-	 *
-	 * @param array $columns The existing columns in the posts table
-	 * @return array Modified array of columns with the featured image column added
+	 * @param array $columns The existing columns in the posts table.
+	 * @return array Modified array of columns with the featured image column added.
 	 */
 	public function fever_add_featured_image_column( $columns ) {
 		$new_columns = array();
@@ -269,59 +240,49 @@ class Admin {
 	/**
 	 * Displays the featured image in the custom column for each Pokemon post.
 	 *
-	 * This function is called for each row in the Pokemon posts table when displaying
-	 * the 'featured_image' column. It shows either the post's thumbnail image
-	 * or a "No Image" message if no featured image is set.
-	 *
-	 * @param string $column The name of the column being displayed
-	 * @param int    $post_id The ID of the current post
+	 * @param string $column The name of the column being displayed.
+	 * @param int    $post_id The ID of the current post.
 	 */
 	public function fever_show_featured_image_column( $column, $post_id ) {
 		if ( 'featured_image' === $column ) {
 			$thumbnail = get_the_post_thumbnail( $post_id, 'thumbnail' );
-			if ( $thumbnail ) {
-				echo wp_kses_post( $thumbnail );
-			} else {
-				echo esc_html__( 'No Image', 'fever-code-challenge' );
-			}
+			echo $thumbnail ? wp_kses_post( $thumbnail ) : esc_html__( 'No Image', 'fever-code-challenge' );
 		}
 	}
 
 	/**
 	 * Adds a custom CSS class to Pokemon thumbnail images.
 	 *
-	 * This function modifies the HTML output of post thumbnails, adding the
-	 * 'pokemon-thumbnail' class to images when they are displayed at thumbnail size.
+	 * @param string $html The thumbnail HTML.
+	 * @param int    $post_id The post ID.
+	 * @param int    $post_thumbnail_id The thumbnail attachment ID.
+	 * @param string $size The size of the image being displayed.
+	 * @param array  $_attr Additional attributes for the image. Unused.
+	 * @return string Modified HTML with the additional class.
 	 *
-	 * @param string $html The thumbnail HTML
-	 * @param int    $post_id The post ID
-	 * @param int    $post_thumbnail_id The thumbnail attachment ID
-	 * @param string $size The size of the image being displayed
-	 * @param array  $attr Additional attributes for the image
-	 * @return string Modified HTML with the additional class
+     * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter
 	 */
-	public function fever_add_thumbnail_class( $html, $post_id, $post_thumbnail_id, $size, $attr ) {
+	public function fever_add_thumbnail_class( $html, $post_id, $post_thumbnail_id, $size, $_attr ) {
 		if ( 'thumbnail' === $size ) {
 			$html = str_replace( '<img', '<img class="pokemon-thumbnail"', $html );
 		}
 		return $html;
 	}
+	// phpcs:enable
+
 
 	/**
 	 * Adds custom CSS styles for the featured image column in the admin interface.
-	 *
-	 * This function outputs inline CSS to control the width of the featured image column
-	 * and ensure proper sizing of Pokemon thumbnail images within the admin interface.
 	 */
 	public function fever_add_admin_column_styles() {
 		echo '<style>
-        .column-featured_image {
-            width: 200px;
-        }
-        .pokemon-thumbnail {
-            max-width: 100%;
-            height: auto;
-        }
-    </style>';
+            .column-featured_image {
+                width: 200px;
+            }
+            .pokemon-thumbnail {
+                max-width: 100%;
+                height: auto;
+            }
+        </style>';
 	}
 }

@@ -2,15 +2,16 @@
 
 namespace FeverCodeChallenge\Tests;
 
-use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use Brain\Monkey;
 
-class TestCase extends PHPUnitTestCase {
-
+class TestCase extends \PHPUnit\Framework\TestCase {
 	protected function setUp(): void {
 		parent::setUp();
-		$this->setUpWPFunctions();
+		Monkey\setUp();
 	}
 
-	protected function setUpWPFunctions(): void {
+	protected function tearDown(): void {
+		Monkey\tearDown();
+		parent::tearDown();
 	}
 }

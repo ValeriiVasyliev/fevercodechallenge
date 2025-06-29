@@ -61,12 +61,13 @@ class PokemonRandom {
 	public function maybe_redirect_random_pokemon(): void {
 		if ( get_query_var( 'random_pokemon' ) ) {
 
+			// Register the script for the random Pokemon functionality.
 			wp_register_script(
 				'fever_code_challenge-front-pokemon-random',
 				$this->plugin->plugin_url() . '/dist/front-pokemon-random.js',
 				array( 'wp-i18n' ),
-				filemtime( $this->plugin->plugin_dir() . '/dist/front-pokemon-random.js', ),
-				true
+				filemtime( $this->plugin->plugin_dir() . '/dist/front-pokemon-random.js' ),
+				1 // Use 1 instead of true for in_footer.
 			);
 
 			// Localize the script with nonce and action.

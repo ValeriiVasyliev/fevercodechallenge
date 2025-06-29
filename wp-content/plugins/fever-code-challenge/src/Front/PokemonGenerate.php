@@ -66,7 +66,7 @@ class PokemonGenerate {
 				$this->plugin->plugin_url() . '/dist/front-pokemon-generate.js',
 				array( 'wp-i18n' ),
 				filemtime( $this->plugin->plugin_dir() . '/dist/front-pokemon-generate.js', ),
-				true
+				1
 			);
 
 			// Localize the script with nonce and action.
